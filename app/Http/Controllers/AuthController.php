@@ -11,6 +11,8 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Str;
 use Firebase\JWT\JWT;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Tymon\JWTAuth\Facades\JWTFactory;
+use Tymon\JWTAuth\Exceptions\JWTException;
 
 
 class AuthController extends Controller
@@ -96,8 +98,18 @@ class AuthController extends Controller
             $payload['instansi'] = $idInstansi;
         }
 
+        $payload = JWTFactory::sub($user->id)
+            ->myCustomString('Foo Bar')
+            ->myCustomArray(['Apples', 'Oranges'])
+            ->myCustomObject($user)
+            ->make();
+
+
         // Generate token JWT dengan payload yang dibuat
-        $token = JWTAuth::fromUser($user, $payload);
+        $token = JWTAuth::encode($payload);
+
+        // return response()->json(['token' => $token]);
+        // $token = JWTAuth::fromUser($user, $payload);
 
         return response()->json([
             'access_token' => $token,
