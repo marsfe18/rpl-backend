@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Kelurahan;
 use App\Models\Posyandu;
 use App\Models\Puskesmas;
 use App\Models\User;
@@ -59,13 +60,21 @@ class AuthController extends Controller
             $instansiName = $instansi ? $instansi->nama : null;
             $payload = JWTFactory::sub($user->id)
                 ->role($roleName)
-                ->user($user)
+                // ->user($user)
+                ->user_id($user->id)
+                ->username($user->username)
                 ->instansi($instansiName)
+                ->instansi_id($instansi->id)
                 ->make();
         } else {
+            $instansi = Kelurahan::where('user_id', $user->id)->first();
+            $instansiName = $instansi ? $instansi->nama : null;
             $payload = JWTFactory::sub($user->id)
                 ->role($roleName)
-                ->user($user)
+                ->user_id($user->id)
+                ->username($user->username)
+                ->instansi($instansiName)
+                ->instansi_id($instansi->id)
                 ->make();
         }
 
