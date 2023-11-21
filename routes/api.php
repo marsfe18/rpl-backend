@@ -7,13 +7,11 @@ use App\Http\Controllers\KelurahanController;
 use App\Http\Controllers\PuskesmasController;
 use App\Http\Controllers\KaderController;
 use App\Http\Controllers\UserController;
-use App\Models\Kader;
 use App\Http\Controllers\PengukuranController;
 use App\Http\Controllers\DataTambahanBalitaController;
 use App\Http\Controllers\JadwalController;
 use App\Http\Controllers\BeritaController;
 use App\Http\Controllers\KoordinatController;
-use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
 /*
