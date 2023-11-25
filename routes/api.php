@@ -143,6 +143,7 @@ Route::group(['middleware' => 'api_token_check'], function () {
     });
 
     Route::group(['prefix' => 'jadwals'], function () {
+        Route::get('/{id}', [JadwalController::class, 'show']);
         Route::post('/', [JadwalController::class, 'store']);
         Route::put('/{id}', [JadwalController::class, 'update']);
         Route::delete('/{id}', [JadwalController::class, 'destroy']);
