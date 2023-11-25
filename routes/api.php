@@ -34,8 +34,8 @@ Route::group(['prefix' => 'balitas'], function () {
     Route::get('/stat/umum', [BalitaController::class, 'stat_umum'])->withoutMiddleware(['verify.token']);
 });
 
-Route::get('Jadwals/', [JadwalController::class, 'index']);
-Route::get('Jadwals/{id}', [JadwalController::class, 'show']);
+Route::get('jadwals/', [JadwalController::class, 'index']);
+Route::get('jadwals/{id}', [JadwalController::class, 'show']);
 
 Route::group(['middleware' => 'api_token_check'], function () {
     Route::resource('kelurahan', KelurahanController::class);
@@ -143,7 +143,7 @@ Route::group(['middleware' => 'api_token_check'], function () {
     });
 
     Route::group(['prefix' => 'jadwals'], function () {
-        Route::get('/{id}', [JadwalController::class, 'show']);
+        // Route::get('/{id}', [JadwalController::class, 'show']);
         Route::post('/', [JadwalController::class, 'store']);
         Route::put('/{id}', [JadwalController::class, 'update']);
         Route::delete('/{id}', [JadwalController::class, 'destroy']);
