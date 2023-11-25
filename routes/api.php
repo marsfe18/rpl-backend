@@ -96,12 +96,12 @@ Route::group(['middleware' => 'api_token_check'], function () {
         Route::get('/kelurahan/stunting', [BalitaController::class, 'getBalitaStunting']);
 
         Route::middleware('check.role:PUSKESMAS')->group(function () {
+            Route::get('/', [BalitaController::class, 'index']);
             Route::delete('/{id}', [BalitaController::class, 'destroy']);
         });
 
         Route::middleware('check.role:POSYANDU, PUSKESMAS')->group(function () {
             Route::post('/', [BalitaController::class, 'store']);
-            Route::get('/', [BalitaController::class, 'index']);
             Route::put('/{id}', [BalitaController::class, 'update']);
             Route::get('/posyandu/{id_posyandu}', [BalitaController::class, 'getBalitaByPosyandu']);
             Route::get('/puskesmas/{id_puskesmas}', [BalitaController::class, 'getBalitaByPuskesmas']);
