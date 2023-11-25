@@ -10,19 +10,14 @@ use App\Models\Role;
 
 class CheckRole
 {
-    /**
-     * Handle an incoming request.
-     *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
-     */
     public function handle($request, Closure $next, ...$roles)
     {
-
         $user = Auth::user();
         $role = Role::find($user->role_id);
         $roleName = $role ? $role->nama : 'Unknown';
 
-        if ($roleName !== $roles) {
+        // Periksa apakah peran pengguna ada di antara peran yang diizinkan
+        if (!in_array($roleName, $roles)) {
             return response()->json(['message' => 'Unauthorized'], 403);
         }
 
