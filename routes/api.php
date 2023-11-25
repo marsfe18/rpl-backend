@@ -57,7 +57,7 @@ Route::group(['middleware' => 'api_token_check'], function () {
             Route::delete('/{id}', [PosyanduController::class, 'destroy']);
         });
 
-        Route::middleware('check.role:KELURAHAN, POSYANDU')->group(function () {
+        Route::middleware('check.role:KELURAHAN,POSYANDU')->group(function () {
             Route::put('/{id}', [PosyanduController::class, 'update']);
         });
     });
@@ -95,7 +95,7 @@ Route::group(['middleware' => 'api_token_check'], function () {
         Route::get('/sort/{sort}', [BalitaController::class, 'sort']);
         Route::get('/kelurahan/stunting', [BalitaController::class, 'getBalitaStunting']);
 
-        Route::middleware('check.role:POSYANDU, PUSKESMAS')->group(function () {
+        Route::middleware('check.role:POSYANDU,PUSKESMAS')->group(function () {
             Route::post('/', [BalitaController::class, 'store']);
             Route::put('/{id}', [BalitaController::class, 'update']);
             Route::get('/posyandu/{id_posyandu}', [BalitaController::class, 'getBalitaByPosyandu']);
@@ -116,7 +116,7 @@ Route::group(['middleware' => 'api_token_check'], function () {
             Route::get('/', [PengukuranController::class, 'index']);
         });
 
-        Route::middleware('check.role:POSYANDU, PUSKESMAS')->group(function () {
+        Route::middleware('check.role:POSYANDU,PUSKESMAS')->group(function () {
             Route::post('/', [PengukuranController::class, 'store']);
             Route::put('/{id}', [PengukuranController::class, 'update']);
             Route::delete('/{id}', [PengukuranController::class, 'destroy']);
@@ -134,7 +134,7 @@ Route::group(['middleware' => 'api_token_check'], function () {
             Route::get('/', [DataTambahanBalitaController::class, 'index']);
         });
 
-        Route::middleware('check.role:POSYANDU, PUSKESMAS')->group(function () {
+        Route::middleware('check.role:POSYANDU,PUSKESMAS')->group(function () {
             Route::post('/', [DataTambahanBalitaController::class, 'store']);
             Route::put('/{id}', [DataTambahanBalitaController::class, 'update']);
             Route::delete('/{id}', [DataTambahanBalitaController::class, 'destroy']);
