@@ -23,6 +23,18 @@ class VerifyCsrfToken extends Middleware
         '/api/kelurahan*',
         '/api/koordinat*',
         '/api/pengukurans*',
-        '/api/user*'
+        '/api/user',
+        '/api/puskesmas',
+        '/api/posyandu',
+        '/api/login',
+        '/api/balitas',
+        '/api/Jadwals',
+        '/api/beritas',
+        '/api/dataTambahanBalitas',
+        '/api/kader',
+        '/api/kelurahan',
+        '/api/koordinat',
+        '/api/pengukurans',
+        '/api/user'
     ];
 }
