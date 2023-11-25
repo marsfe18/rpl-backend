@@ -17,6 +17,7 @@ class CheckRole
      */
     public function handle($request, Closure $next, $roles)
     {
+
         $user = Auth::user();
         $role = Role::find($user->role_id);
         $roleName = $role ? $role->nama : 'Unknown';
