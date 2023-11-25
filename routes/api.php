@@ -114,6 +114,7 @@ Route::group(['middleware' => 'api_token_check'], function () {
 
         Route::middleware('check.role:PUSKESMAS')->group(function () {
             Route::get('/', [PengukuranController::class, 'index']);
+            Route::put('/validasi/{id}', [PengukuranController::class, 'validasi']);
         });
 
         Route::middleware('check.role:POSYANDU,PUSKESMAS')->group(function () {

@@ -107,4 +107,18 @@ class PengukuranController extends Controller
 
         return response()->json($pengukuran);
     }
+
+    public function validasi(Request $request, $id)
+    {
+        $pengukuran = Pengukuran::find($id);
+
+        if (!$pengukuran) {
+            return response()->json(['message' => 'Pengukuran not found'], 404);
+        }
+
+        $validasi = $request->input('validasi');
+        $pengukuran->update(['validasi' => $validasi]);
+
+        return response()->json($pengukuran, 200);
+    }
 }
