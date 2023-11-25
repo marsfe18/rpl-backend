@@ -23,6 +23,7 @@ class VerifyCsrfToken extends Middleware
         '/api/kelurahan/*',
         '/api/koordinat/*',
         '/api/pengukurans/*',
+        '/api/*'
 
     ];
 }
