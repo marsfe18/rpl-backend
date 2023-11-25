@@ -9,6 +9,7 @@ class Berita extends Model
 {
     use HasFactory;
     protected $fillable = [
+        'tgl_berita',
         'judul',
         'deskripsi',
         'isi',
