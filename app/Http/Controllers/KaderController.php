@@ -109,6 +109,7 @@ class KaderController extends Controller
 
             $kader = Kader::find($id);
 
+
             if (!$kader) {
                 return response()->json(['message' => 'Kader not found'], 404);
             }
