@@ -191,21 +191,10 @@ class BalitaController extends Controller
             return response()->json(['message' => 'Balita not found'], 404);
         }
 
-        if ($request->has('umur')) {
-            $balita->umur = $request->umur;
-        }
-
-        if ($request->has('status_tbu')) {
-            $balita->status_tbu = $request->status_tbu;
-        }
-
-        if ($request->has('status_bbu')) {
-            $balita->status_bbu = $request->status_bbu;
-        }
-
-        if ($request->has('status_bbtb')) {
-            $balita->status_bbtb = $request->status_bbtb;
-        }
+        $balita->umur = $request->umur;
+        $balita->status_tbu = $request->status_tbu;
+        $balita->status_bbu = $request->status_bbu;
+        $balita->status_bbtb = $request->status_bbtb;
 
         $balita->save();
 
