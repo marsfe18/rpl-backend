@@ -65,7 +65,7 @@ class KaderController extends Controller
         try {
             $this->validate($request, [
                 'nama' => 'required',
-                'jabatan' => 'required',
+                'jabatan' => ['required', 'in:Ketua,Sekretaris,Bendahara'],
                 'posyandu_id' => 'required',
             ]);
 
