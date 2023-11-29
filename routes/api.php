@@ -105,6 +105,7 @@ Route::group(['middleware' => 'api_token_check'], function () {
         Route::middleware('check.role:PUSKESMAS')->group(function () {
             Route::get('/', [BalitaController::class, 'index']);
             Route::delete('/{id}', [BalitaController::class, 'destroy']);
+            Route::put('/status/{id}', [BalitaController::class, 'updateStatus']);
         });
     });
 
