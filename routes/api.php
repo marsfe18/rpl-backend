@@ -100,12 +100,12 @@ Route::group(['middleware' => 'api_token_check'], function () {
             Route::put('/{id}', [BalitaController::class, 'update']);
             Route::get('/posyandu/{id_posyandu}', [BalitaController::class, 'getBalitaByPosyandu']);
             Route::get('/puskesmas/{id_puskesmas}', [BalitaController::class, 'getBalitaByPuskesmas']);
+            Route::put('/status/{id}', [BalitaController::class, 'updateStatus']);
         });
 
         Route::middleware('check.role:PUSKESMAS')->group(function () {
             Route::get('/', [BalitaController::class, 'index']);
             Route::delete('/{id}', [BalitaController::class, 'destroy']);
-            Route::put('/status/{id}', [BalitaController::class, 'updateStatus']);
         });
     });
 
