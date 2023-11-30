@@ -28,9 +28,22 @@ class BeritaController extends Controller
             'judul' => 'required|string',
             'deskripsi' => 'required|string',
             'isi' => 'required|string',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
         ]);
 
-        $berita = Berita::create($request->all());
+        // Simpan file gambar
+        if ($request->hasFile('gambar')) {
+            $gambar = $request->file('gambar');
+            $gambarName = time() . '_' . $gambar->getClientOriginalName();
+            $gambar->move(public_path('uploads'), $gambarName);
+        }
+
+        $berita = Berita::create([
+            'judul' => $request->input('judul'),
+            'deskripsi' => $request->input('deskripsi'),
+            'isi' => $request->input('isi'),
+            'gambar' => $gambarName ?? null, // Simpan nama file gambar ke dalam kolom 'gambar'
+        ]);
 
         return response()->json($berita, 201);
     }
