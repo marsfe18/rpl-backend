@@ -42,7 +42,8 @@ class BeritaController extends Controller
             'deskripsi' => $request->input('deskripsi'),
             'isi' => $request->input('isi'),
             'gambar' => $gambarName,
-            'tgl_berita' => date('Y-m-d H:i:s', time())
+            'tgl_berita' => date('Y-m-d H:i:s', time()),
+            'tipe' => $request->file('gambar')->getClientMimeType()
         ]);
 
         Storage::disk('public')->put($gambarName, file_get_contents($request->gambar));
@@ -93,5 +94,6 @@ class BeritaController extends Controller
                 'Content-Type' => 'image/png', // Sesuaikan dengan tipe file gambar yang benar
             ]);
         }
+        return response()->json(['message' => 'File not found'], 404);
     }
 }
