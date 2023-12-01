@@ -34,7 +34,7 @@ class BeritaController extends Controller
         ]);
 
         // DB::beginTransaction();
-        $gambarName = time() . '_' . $request->file('gambar')->getClientOriginalExtension();
+        $gambarName = time() . '_' . $request->file('gambar')->getClientOriginalName();
 
         $berita = Berita::create([
             'judul' => $request->input('judul'),
