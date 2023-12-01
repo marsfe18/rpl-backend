@@ -4,6 +4,8 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Berita;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Storage;
 
 class BeritaController extends Controller
 {
@@ -31,21 +33,26 @@ class BeritaController extends Controller
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
         ]);
 
-        // Simpan file gambar
-        if ($request->hasFile('gambar')) {
-            $gambar = $request->file('gambar');
-            $gambarName = time() . '_' . $gambar->getClientOriginalName();
-            $gambar->move(public_path('uploads'), $gambarName);
-        }
+        // DB::beginTransaction();
+        $gambarName = time() . '_' . $request->file('gambar')->getClientOriginalExtension();
 
-        // $berita = Berita::create([
-        //     'judul' => $request->input('judul'),
-        //     'deskripsi' => $request->input('deskripsi'),
-        //     'isi' => $request->input('isi'),
-        //     'gambar' => $gambarName ?? null, // Simpan nama file gambar ke dalam kolom 'gambar'
-        // ]);
+        $berita = Berita::create([
+            'judul' => $request->input('judul'),
+            'deskripsi' => $request->input('deskripsi'),
+            'isi' => $request->input('isi'),
+            'gambar' => $gambarName,
+            'tgl_berita' => date('Y-m-d H:i:s', time())
+        ]);
 
-        return response()->json($request->file('gambar'), 201);
+        Storage::disk('public')->put($gambarName, file_get_contents($request->gambar));
+
+
+
+        // DB::commit();
+
+        return response()->json([
+            'data' => $berita
+        ], 201);
     }
 
     public function update(Request $request, $id)
