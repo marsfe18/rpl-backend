@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Models\Berita;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Storage;
 
@@ -33,7 +34,7 @@ class BeritaController extends Controller
             'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
         ]);
 
-        // DB::beginTransaction();
+        DB::beginTransaction();
         $gambarName = time() . '_' . $request->file('gambar')->getClientOriginalName();
 
         $berita = Berita::create([
@@ -48,7 +49,7 @@ class BeritaController extends Controller
 
 
 
-        // DB::commit();
+        DB::commit();
 
         return response()->json([
             'data' => $berita
@@ -78,5 +79,19 @@ class BeritaController extends Controller
 
         $berita->delete();
         return response()->json(null, 204);
+    }
+
+
+    public function getGambar($gambarName)
+    {
+
+        $path = $gambarName;
+
+        if (Storage::disk('public')->exists($path)) {
+            $file = Storage::disk('public')->get($path);
+            return new Response($file, 200, [
+                'Content-Type' => 'image/png', // Sesuaikan dengan tipe file gambar yang benar
+            ]);
+        }
     }
 }
