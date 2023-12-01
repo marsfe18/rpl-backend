@@ -28,7 +28,7 @@ class BeritaController extends Controller
             'judul' => 'required|string',
             'deskripsi' => 'required|string',
             'isi' => 'required|string',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
+            // 'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
         ]);
 
         // Simpan file gambar
