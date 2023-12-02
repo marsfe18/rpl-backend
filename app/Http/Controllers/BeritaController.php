@@ -84,7 +84,7 @@ class BeritaController extends Controller
         $berita->isi = $request->isi;
         $berita->tgl_berita = $request->tgl_berita;
 
-        $berita->save();
+        $berita->update($berita->all());
 
         return response()->json([
             'data' => $berita
