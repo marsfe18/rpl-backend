@@ -86,6 +86,7 @@ class BeritaController extends Controller
 
         $berita->update($berita->all());
 
+
         return response()->json([
             'data' => $berita
         ], 200);
