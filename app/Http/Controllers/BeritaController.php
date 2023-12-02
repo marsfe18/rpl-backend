@@ -55,6 +55,7 @@ class BeritaController extends Controller
     }
 
 
+
     public function update(Request $request, $id)
     {
         $berita = Berita::find($id);
@@ -63,11 +64,19 @@ class BeritaController extends Controller
             return response()->json(['message' => 'Berita not found'], 404);
         }
 
+        $request->validate([
+            'judul' => 'required|string',
+            'deskripsi' => 'required|string',
+            'isi' => 'required|string',
+            'gambar' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
+        ]);
+
+        // Jika ada file gambar yang diupload
         if ($request->hasFile('gambar')) {
             Storage::disk('public')->delete($berita->gambar);
 
             $gambarName = time() . '_' . $request->file('gambar')->getClientOriginalName();
-            Storage::disk('public')->put($gambarName, file_get_contents($request->gambar));
+            Storage::disk('public')->put($gambarName, file_get_contents($request->file('gambar')));
             $berita->gambar = $gambarName;
             $berita->tipe = $request->file('gambar')->getClientMimeType();
         }
@@ -83,6 +92,7 @@ class BeritaController extends Controller
             'data' => $berita
         ], 200);
     }
+
 
 
     public function destroy($id)
