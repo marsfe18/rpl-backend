@@ -103,7 +103,7 @@ class KaderController extends Controller
     {
         $this->validate($request, [
             'nama' => 'required',
-            'jabatan' => ['required', 'in:Ketua,Sekretaris,Bendahara,Anggota'],
+            'jabatan' => ['required', 'in:Ketua,Sekretaris,Bendahara'],
             'posyandu_id' => 'required',
         ]);
 
@@ -142,16 +142,15 @@ class KaderController extends Controller
         ], 200);
     }
 
+
+
     public function destroy(string $id)
     {
         $kader = Kader::find($id);
-
         if (!$kader) {
             return response()->json(['message' => 'Kader not found'], 404);
         }
-
         $kader->delete();
-
         return response()->json(['message' => 'Kader deleted successfully'], 200);
     }
 }
