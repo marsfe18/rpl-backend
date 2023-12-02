@@ -60,10 +60,39 @@ class BeritaController extends Controller
         if (!$berita) {
             return response()->json(['message' => 'Berita not found'], 404);
         }
-        $request->validate([]);
-        $berita->update($request->all());
+        $request->validate([
+            'judul' => 'required|string',
+            'deskripsi' => 'required|string',
+            'isi' => 'required|string',
+            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
+        ]);
 
-        return response()->json($berita, 200);
+        DB::beginTransaction();
+        $gambarBaru = time() . '_' . $request->file('gambar')->getClientOriginalName();
+
+        // $berita = Berita::create([
+        //     'judul' => $request->input('judul'),
+        //     'deskripsi' => $request->input('deskripsi'),
+        //     'isi' => $request->input('isi'),
+        //     'gambar' => $gambarBaru,
+        //     'tgl_berita' => date('Y-m-d H:i:s', time()),
+        //     'tipe' => $request->file('gambar')->getClientMimeType()
+        // ]);
+        $berita->judul = $request->input('judul');
+        $berita->deskripsi = $request->input('deskripsi');
+        $berita->isi = $request->input('isi');
+        $berita->gambar = $gambarBaru;
+        $berita->tipe = $request->file('gambar')->getClientMimeType();
+
+
+        Storage::disk('public')->put($gambarBaru, file_get_contents($request->gambar));
+        Storage::disk('public')->delete($gambarBaru);
+        DB::commit();
+
+        return response()->json([
+            'message' => 'Berita berhasil diubah',
+            'data' => $berita
+        ], 200);
     }
 
 
