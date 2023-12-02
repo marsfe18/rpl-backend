@@ -66,7 +66,7 @@ class BeritaController extends Controller
             'judul' => 'required|string',
             'deskripsi' => 'required|string',
             'isi' => 'required|string',
-            'gambar' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust as needed
+            // 'gambar' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust as needed
         ]);
 
         // If there is a file upload
