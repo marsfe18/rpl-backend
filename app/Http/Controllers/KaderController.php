@@ -107,6 +107,7 @@ class KaderController extends Controller
                 'posyandu_id' => 'required',
             ]);
 
+
             $kader = Kader::find($id);
 
             if (!$kader) {
