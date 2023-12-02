@@ -57,45 +57,40 @@ class BeritaController extends Controller
     public function update(Request $request, $id)
     {
         $berita = Berita::find($id);
+
         if (!$berita) {
             return response()->json(['message' => 'Berita not found'], 404);
         }
+
         $request->validate([
             'judul' => 'required|string',
             'deskripsi' => 'required|string',
             'isi' => 'required|string',
+            'gambar' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
         ]);
 
-        DB::beginTransaction();
+        // Jika ada file gambar yang diupload
+        if ($request->hasFile('gambar')) {
+            Storage::disk('public')->delete($berita->gambar);
 
-        // $berita = Berita::create([
-        //     'judul' => $request->input('judul'),
-        //     'deskripsi' => $request->input('deskripsi'),
-        //     'isi' => $request->input('isi'),
-        //     'gambar' => $gambarBaru,
-        //     'tgl_berita' => date('Y-m-d H:i:s', time()),
-        //     'tipe' => $request->file('gambar')->getClientMimeType()
-        // ]);
+            $gambarName = time() . '_' . $request->file('gambar')->getClientOriginalName();
+            Storage::disk('public')->put($gambarName, file_get_contents($request->gambar));
+            $berita->gambar = $gambarName;
+            $berita->tipe = $request->file('gambar')->getClientMimeType();
+        }
+
         $berita->judul = $request->input('judul');
         $berita->deskripsi = $request->input('deskripsi');
         $berita->isi = $request->input('isi');
-        $berita->tipe = $request->file('gambar')->getClientMimeType();
+        $berita->tgl_berita = date('Y-m-d H:i:s', time());
 
-        if ($request->has('gambar')) {
-            $gambarBaru = time() . '_' . $request->file('gambar')->getClientOriginalName();
-            Storage::disk('public')->put($gambarBaru, file_get_contents($request->gambar));
-            $berita->gambar = $gambarBaru;
-            Storage::disk('public')->delete($gambarBaru);
-        }
-
-        $berita->update();
-        DB::commit();
+        $berita->save();
 
         return response()->json([
-            'message' => 'Berita berhasil diubah',
             'data' => $berita
         ], 200);
     }
+
 
 
     public function destroy($id)
