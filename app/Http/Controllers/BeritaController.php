@@ -82,10 +82,10 @@ class BeritaController extends Controller
         }
 
         // Update other fields
-        $berita->judul = $request->input('judul');
-        $berita->deskripsi = $request->input('deskripsi');
-        $berita->isi = $request->input('isi');
-        $berita->tgl_berita = $request->input('tgl_berita'); // Assuming this is a field in your form
+        $berita->judul = $request->get('judul');
+        $berita->deskripsi = $request->get('deskripsi');
+        $berita->isi = $request->get('isi');
+        $berita->tgl_berita = $request->get('tgl_berita'); // Assuming this is a field in your form
 
         // Save the updated data
         $berita->save();
