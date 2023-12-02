@@ -47,9 +47,6 @@ class BeritaController extends Controller
         ]);
 
         Storage::disk('public')->put($gambarName, file_get_contents($request->gambar));
-
-
-
         DB::commit();
 
         return response()->json([
@@ -63,35 +60,55 @@ class BeritaController extends Controller
         if (!$berita) {
             return response()->json(['message' => 'Berita not found'], 404);
         }
-
         $request->validate([]);
-
         $berita->update($request->all());
 
         return response()->json($berita, 200);
     }
 
+
     public function destroy($id)
     {
         $berita = Berita::find($id);
+
         if (!$berita) {
             return response()->json(['message' => 'Berita not found'], 404);
         }
-
+        $gambar = $berita->gambar;
+        if ($gambar) {
+            Storage::disk('public')->delete($gambar);
+        }
         $berita->delete();
-        return response()->json(null, 204);
+        return response()->json(['message' => 'Berita deleted successfully'], 200);
     }
 
 
     public function getGambar($gambarName)
     {
 
-        $path = $gambarName;
-
-        if (Storage::disk('public')->exists($path)) {
-            $file = Storage::disk('public')->get($path);
+        $berita = Berita::where('gambar', $gambarName)->first();
+        if (Storage::disk('public')->exists($gambarName)) {
+            $file = Storage::disk('public')->get($gambarName);
             return new Response($file, 200, [
-                'Content-Type' => 'image/png', // Sesuaikan dengan tipe file gambar yang benar
+                'Content-Type' => $berita->tipe, // Sesuaikan dengan tipe file gambar yang benar
+            ]);
+        }
+        return response()->json(['message' => 'File not found'], 404);
+    }
+
+
+    public function beritaGambar($id)
+    {
+        $berita = Berita::find($id);
+        if (!$berita) {
+            return response()->json(['message' => 'Berita not found'], 404);
+        }
+        $gambarName = $berita->gambar;
+        $mime = $berita->tipe;
+        if (Storage::disk('public')->exists($gambarName)) {
+            $file = Storage::disk('public')->get($gambarName);
+            return new Response($file, 200, [
+                'Content-Type' => $mime, // Sesuaikan dengan tipe file gambar yang benar
             ]);
         }
         return response()->json(['message' => 'File not found'], 404);
