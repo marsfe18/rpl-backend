@@ -117,7 +117,7 @@ class KaderController extends Controller
                 ->where('jabatan', $request->jabatan)
                 ->first();
 
-            if ($existingKader) {
+            if ($request->jabatan !== 'Anggota' && $existingKader) {
                 return response()->json([
                     'message' => 'The specified role already exists in the Posyandu.',
                 ], 422);
