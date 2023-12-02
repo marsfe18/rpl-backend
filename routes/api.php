@@ -116,6 +116,7 @@ Route::group(['middleware' => 'api_token_check'], function () {
     Route::group(['prefix' => 'pengukurans'], function () {
         Route::get('/{id}', [PengukuranController::class, 'show']);
         Route::get('/sort/{sort}', [PengukuranController::class, 'sort']);
+        Route::get('/balita/{balita_id}', [PengukuranController::class, 'pengukuranByBalita']);
 
         Route::middleware('check.role:PUSKESMAS')->group(function () {
             Route::get('/', [PengukuranController::class, 'index']);
@@ -128,13 +129,13 @@ Route::group(['middleware' => 'api_token_check'], function () {
             Route::delete('/{id}', [PengukuranController::class, 'destroy']);
             Route::get('/umur-cat-1/{balita_id}', [PengukuranController::class, 'pengukuranByUmurCat1']);
             Route::get('/umur-cat-2/{balita_id}', [PengukuranController::class, 'pengukuranByUmurCat2']);
-            Route::get('/balita/{balita_id}', [PengukuranController::class, 'pengukuranByBalita']);
             Route::get('/umur/{balita_id}/{umur}', [PengukuranController::class, 'pengukuranByUmur']);
         });
     });
 
     Route::group(['prefix' => 'dataTambahanBalitas'], function () {
         Route::get('/{id}', [DataTambahanBalitaController::class, 'show']);
+        Route::get('/byBalitaId/{balita_id}', [DataTambahanBalitaController::class, 'getDataTambahanByBalita']);
 
         Route::middleware('check.role:PUSKESMAS')->group(function () {
             Route::get('/', [DataTambahanBalitaController::class, 'index']);
@@ -144,7 +145,6 @@ Route::group(['middleware' => 'api_token_check'], function () {
             Route::post('/', [DataTambahanBalitaController::class, 'store']);
             Route::put('/{id}', [DataTambahanBalitaController::class, 'update']);
             Route::delete('/{id}', [DataTambahanBalitaController::class, 'destroy']);
-            Route::get('/byBalitaId/{balita_id}', [DataTambahanBalitaController::class, 'getDataTambahanByBalita']);
         });
     });
 

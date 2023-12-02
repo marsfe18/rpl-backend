@@ -64,11 +64,9 @@ class BeritaController extends Controller
             'judul' => 'required|string',
             'deskripsi' => 'required|string',
             'isi' => 'required|string',
-            'gambar' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
         ]);
 
         DB::beginTransaction();
-        $gambarBaru = time() . '_' . $request->file('gambar')->getClientOriginalName();
 
         // $berita = Berita::create([
         //     'judul' => $request->input('judul'),
@@ -81,12 +79,16 @@ class BeritaController extends Controller
         $berita->judul = $request->input('judul');
         $berita->deskripsi = $request->input('deskripsi');
         $berita->isi = $request->input('isi');
-        $berita->gambar = $gambarBaru;
         $berita->tipe = $request->file('gambar')->getClientMimeType();
 
+        if ($request->has('gambar')) {
+            $gambarBaru = time() . '_' . $request->file('gambar')->getClientOriginalName();
+            Storage::disk('public')->put($gambarBaru, file_get_contents($request->gambar));
+            $berita->gambar = $gambarBaru;
+            Storage::disk('public')->delete($gambarBaru);
+        }
 
-        Storage::disk('public')->put($gambarBaru, file_get_contents($request->gambar));
-        Storage::disk('public')->delete($gambarBaru);
+        $berita->update();
         DB::commit();
 
         return response()->json([
