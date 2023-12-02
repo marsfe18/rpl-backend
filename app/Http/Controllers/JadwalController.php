@@ -9,7 +9,7 @@ class JadwalController extends Controller
 {
     public function index()
     {
-        $jadwal = Jadwal::orderBy('tanggal', 'asc')->get();
+        $jadwal = Jadwal::orderBy('tanggal', 'desc')->get();
         return response()->json($jadwal, 200);
     }
 
