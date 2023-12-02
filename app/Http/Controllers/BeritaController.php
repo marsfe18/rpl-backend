@@ -62,12 +62,12 @@ class BeritaController extends Controller
             return response()->json(['message' => 'Berita not found'], 404);
         }
 
-        $request->validate([
-            'judul' => 'required|string',
-            'deskripsi' => 'required|string',
-            'isi' => 'required|string',
-            'gambar' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
-        ]);
+        // $request->validate([
+        //     'judul' => 'required|string',
+        //     'deskripsi' => 'required|string',
+        //     'isi' => 'required|string',
+        //     'gambar' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
+        // ]);
 
         // Jika ada file gambar yang diupload
         if ($request->hasFile('gambar')) {
