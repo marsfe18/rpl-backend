@@ -36,6 +36,7 @@ Route::group(['prefix' => 'balitas'], function () {
 
 Route::get('jadwals/', [JadwalController::class, 'index']);
 Route::get('jadwals/{id}', [JadwalController::class, 'show']);
+Route::get('beritas/', [BeritaController::class, 'index']);
 Route::get('beritas/{id}', [BeritaController::class, 'show']);
 Route::get('beritas/{id}/gambar', [BeritaController::class, 'beritaGambar']);
 Route::get('gambar/{gambarName}', [BeritaController::class, 'getGambar']);
