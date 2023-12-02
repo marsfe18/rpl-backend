@@ -79,6 +79,7 @@ class BeritaController extends Controller
             $berita->tipe = $request->file('gambar')->getClientMimeType();
         }
 
+
         $berita->judul = $request->input('judul');
         $berita->deskripsi = $request->input('deskripsi');
         $berita->isi = $request->input('isi');
