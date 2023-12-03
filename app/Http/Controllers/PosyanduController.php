@@ -77,7 +77,7 @@ class PosyanduController extends Controller
 
         $koordinat = new Koordinat();
         $koordinat->longitut = $request->input('longitut');
-        $koordinat->longitut = $request->input('latitude');
+        $koordinat->latitude = $request->input('latitude');
         $koordinat->save();
 
         // $koordinat = Koordinat::create([
