@@ -82,7 +82,7 @@ class PosyanduController extends Controller
             $posyandu->koordinat_id = $request->koordinat_id;
         } else {
             $koordinat = Koordinat::create([
-                'longitude' => $faker->longitude,
+                'longitut' => $faker->longitude,
                 'latitude' => $faker->latitude
             ]);
             $posyandu->koordinat_id = $koordinat->id;
