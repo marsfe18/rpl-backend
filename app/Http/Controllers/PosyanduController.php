@@ -55,6 +55,8 @@ class PosyanduController extends Controller
             'rw' => 'required',
             'nomor_telepon' => 'required',
             'kepala' => 'required',
+            'longitut' => 'longitut',
+            'latitude' => 'latitude',
             'puskesmas_id' => 'required',
             'username' => 'required|min:4|unique:users',
             'password' => 'required|min:6|same:confirm_password',
@@ -73,20 +75,16 @@ class PosyanduController extends Controller
         $user->role_id = 1;
         $user->save();
 
-        // $koordinat = Koordinat::create($request->input('koordinat'));
-        // $koordinat->save();
+        $koordinat = Koordinat::create([
+            'longitut' => $request->longitut,
+            'latitude' => $request->latitude
+        ]);
+
+        $koordinat->save();
 
         $posyandu = new Posyandu();
         $posyandu->nama = $request->input('nama');
-        if ($request->has('koordinat_id')) {
-            $posyandu->koordinat_id = $request->koordinat_id;
-        } else {
-            $koordinat = Koordinat::create([
-                'longitut' => $faker->longitude,
-                'latitude' => $faker->latitude
-            ]);
-            $posyandu->koordinat_id = $koordinat->id;
-        }
+        $posyandu->koordinat_id = $koordinat->id;
         $posyandu->puskesmas_id = $puskesmas->id;
         $posyandu->alamat = $request->input('alamat');
         $posyandu->rw = $request->input('rw');
