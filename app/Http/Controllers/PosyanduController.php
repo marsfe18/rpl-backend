@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use PDOException;
+use Faker\Factory as FakerFactory;
 
 class PosyanduController extends Controller
 {
@@ -46,13 +47,14 @@ class PosyanduController extends Controller
     {
 
         DB::beginTransaction();
+
+        $faker = FakerFactory::create();
         $this->validate($request, [
             'nama' => 'required',
             'alamat' => 'required',
             'rw' => 'required',
             'nomor_telepon' => 'required',
             'kepala' => 'required',
-            // 'koordinat' => 'required',
             'puskesmas_id' => 'required',
             'username' => 'required|min:4|unique:users',
             'password' => 'required|min:6|same:confirm_password',
@@ -62,6 +64,7 @@ class PosyanduController extends Controller
         ]);
 
         $puskesmas = Puskesmas::findOrFail($request->input('puskesmas_id'));
+
 
         $user = new User();
         $user->name = $request->input('nama');
@@ -75,6 +78,15 @@ class PosyanduController extends Controller
 
         $posyandu = new Posyandu();
         $posyandu->nama = $request->input('nama');
+        if ($request->has('koordinat_id')) {
+            $posyandu->koordinat_id = $request->koordinat_id;
+        } else {
+            $koordinat = Koordinat::create([
+                'longitude' => $faker->longitude,
+                'latitude' => $faker->latitude
+            ]);
+            $posyandu->koordinat_id = $koordinat->id;
+        }
         $posyandu->puskesmas_id = $puskesmas->id;
         $posyandu->alamat = $request->input('alamat');
         $posyandu->rw = $request->input('rw');
