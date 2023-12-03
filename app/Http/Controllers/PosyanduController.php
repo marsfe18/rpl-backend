@@ -75,10 +75,15 @@ class PosyanduController extends Controller
         $user->role_id = 1;
         $user->save();
 
-        $koordinat = Koordinat::create([
-            'longitut' => $request->longitut,
-            'latitude' => $request->latitude
-        ]);
+        $koordinat = new Koordinat();
+        $koordinat->longitut = $request->input('longitut');
+        $koordinat->longitut = $request->input('latitude');
+        $koordinat->save();
+
+        // $koordinat = Koordinat::create([
+        //     'longitut' => $request->longitut,
+        //     'latitude' => $request->latitude
+        // ]);
 
         $koordinat->save();
 
