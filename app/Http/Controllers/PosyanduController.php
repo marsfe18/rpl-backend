@@ -15,6 +15,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Validation\ValidationException;
 use PDOException;
+use Faker\Factory as FakerFactory;
 
 class PosyanduController extends Controller
 {
@@ -46,13 +47,16 @@ class PosyanduController extends Controller
     {
 
         DB::beginTransaction();
+
+        $faker = FakerFactory::create();
         $this->validate($request, [
             'nama' => 'required',
             'alamat' => 'required',
             'rw' => 'required',
             'nomor_telepon' => 'required',
             'kepala' => 'required',
-            // 'koordinat' => 'required',
+            'longitut' => 'required',
+            'latitude' => 'required',
             'puskesmas_id' => 'required',
             'username' => 'required|min:4|unique:users',
             'password' => 'required|min:6|same:confirm_password',
@@ -63,6 +67,7 @@ class PosyanduController extends Controller
 
         $puskesmas = Puskesmas::findOrFail($request->input('puskesmas_id'));
 
+
         $user = new User();
         $user->name = $request->input('nama');
         $user->username = $request->input('username');
@@ -70,17 +75,27 @@ class PosyanduController extends Controller
         $user->role_id = 1;
         $user->save();
 
-        // $koordinat = Koordinat::create($request->input('koordinat'));
+        $koordinat = new Koordinat();
+        $koordinat->longitut = $request->input('longitut');
+        $koordinat->latitude = $request->input('latitude');
+        $koordinat->save();
+
+        // $koordinat = Koordinat::create([
+        //     'longitut' => $request->longitut,
+        //     'latitude' => $request->latitude
+        // ]);
+
         // $koordinat->save();
 
         $posyandu = new Posyandu();
         $posyandu->nama = $request->input('nama');
+        $posyandu->koordinat_id = $koordinat->id;
         $posyandu->puskesmas_id = $puskesmas->id;
         $posyandu->alamat = $request->input('alamat');
         $posyandu->rw = $request->input('rw');
         $posyandu->kepala = $request->input('kepala');
         $posyandu->nomor_telepon = $request->input('nomor_telepon');
-        $posyandu->koordinat_id = $request->input('koordinat_id');
+        // $posyandu->koordinat_id = $request->input('koordinat_id');
         $posyandu->user_id = $user->id;
         $posyandu->jumlah_balita = 0;
         $posyandu->save();

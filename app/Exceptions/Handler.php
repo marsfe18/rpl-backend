@@ -42,42 +42,42 @@ class Handler extends ExceptionHandler
         DB::rollBack();
         if ($e instanceof MethodNotAllowedHttpException) {
             return response()->json([
-                'message' => 'This Method is not allowed',
+                'error' => 'This Method is not allowed',
                 'data' => null,
-                'error' => $e->getMessage()
+                'message' => $e->getMessage()
             ], 405);
         }
         if ($e instanceof NotFoundHttpException) {
             return response()->json([
-                'message' => 'This Route is not found',
+                'error' => 'This Route is not found',
                 'data' => null,
-                'error' => $e->getMessage(),
+                'message' => $e->getMessage(),
             ], 404);
         }
         if ($e instanceof BadMethodCallException) {
             return response()->json([
-                'message' => 'Bad Method Called',
+                'error' => 'Bad Method Called',
                 'data' => null,
-                'error' => $e->getMessage(),
+                'message' => $e->getMessage(),
             ], 404);
         }
         if ($e instanceof ValidationException) {
             return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
+                'error' => 'Validation failed',
+                'message' => $e->errors(),
             ], 422);
         }
 
         if ($e instanceof ModelNotFoundException) {
             return response()->json([
-                'message' => 'Resource not found',
-                'error' => $e->getModel()
+                'error' => 'Resource not found',
+                'message' => $e->getModel()
             ], 404);
         }
 
         if ($e instanceof PDOException) {
             return response()->json([
-                'message' => 'Something Went Wrong',
+                'error' => 'Something Went Wrong',
                 'error' => Str::before($e->getMessage(), '(Connection:'),
             ], 404);
         }

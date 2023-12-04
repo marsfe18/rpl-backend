@@ -62,96 +62,96 @@ class KaderController extends Controller
 
     public function store(Request $request)
     {
-        try {
-            $this->validate($request, [
-                'nama' => 'required',
-                'jabatan' => ['required', 'in:Ketua,Sekretaris,Bendahara,Anggota'],
-                'posyandu_id' => 'required',
-            ]);
+        $this->validate($request, [
+            'nama' => 'required',
+            'jabatan' => ['required', 'in:Ketua,Sekretaris,Bendahara,Anggota'],
+            'posyandu_id' => 'required',
+        ]);
 
-            $kader = Kader::create($request->all());
-
-            return response()->json([
-                'message' => 'Kader created successfully',
-                'data' => $kader,
-            ], 201);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
-        } catch (QueryException $e) {
-            if ($e->errorInfo[1] === 1452) {
-                return response()->json([
-                    'message' => 'Foreign key constraint violation. The specified posyandu_id does not exist.',
-                ], 404);
-            } else {
-                // Handle other database-related errors
-                return response()->json([
-                    'message' => 'Database error',
-                ], 500);
+        if ($request->jabatan !== 'Anggota') {
+            $exist = Kader::where('posyandu_id', $request->posyandu_id)
+                ->where('jabatan', $request->jabatan)
+                ->count();
+            if ($exist > 0) {
+                return response()->json(['message' => 'Posyandu ini telah memiliki seorang ' . $request->jabatan]);
             }
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => 'Internal sever error'
-            ], 500);
         }
+
+
+        $kader = Kader::create($request->all());
+
+        return response()->json([
+            'message' => 'Kader created successfully',
+            'data' => $kader,
+        ], 201);
     }
 
     public function update(Request $request, string $id)
     {
-        try {
-            $this->validate($request, [
-                'nama' => 'required',
-                'jabatan' => 'required',
-                'posyandu_id' => 'required',
-            ]);
+        $this->validate($request, [
+            'nama' => 'required',
+            'jabatan' => ['required', 'in:Ketua,Sekretaris,Bendahara,Anggota'],
+            'posyandu_id' => 'required',
+        ]);
 
-
-            $kader = Kader::find($id);
-
-            if (!$kader) {
-                return response()->json(['message' => 'Kader not found'], 404);
-            }
-
-            $kader->update($request->all());
-
-            return response()->json([
-                'message' => 'Kader updated successfully',
-                'data' => $kader,
-            ], 200);
-        } catch (ValidationException $e) {
-            return response()->json([
-                'message' => 'Validation failed',
-                'errors' => $e->errors(),
-            ], 422);
-        } catch (QueryException $e) {
-            if ($e->errorInfo[1] === 1452) {
-                return response()->json([
-                    'message' => 'Foreign key constraint violation. The specified fk_id does not exist.',
-                ], 404);
-            } else {
-                return response()->json([
-                    'message' => 'Database error',
-                ], 500);
-            }
-        } catch (Exception $e) {
-            return response()->json([
-                'message' => 'Internal sever error'
-            ], 500);
-        }
-    }
-
-    public function destroy(string $id)
-    {
         $kader = Kader::find($id);
 
         if (!$kader) {
             return response()->json(['message' => 'Kader not found'], 404);
         }
+        // if ($request->has('jabatan') && $request->jabatan !== $kader->jabatan) {
+        //     $existingKader = Kader::where('posyandu_id', $request->posyandu_id)
+        //         ->where('jabatan', $request->jabatan)
+        //         ->first();
 
+        //     if ($request->jabatan !== 'Anggota' && $existingKader) {
+        //         return response()->json([
+        //             'message' => 'The specified role already exists in the Posyandu.',
+        //         ], 422);
+        //     }
+
+        //     $existingRoles = Kader::where('posyandu_id', $request->posyandu_id)
+        //         ->whereIn('jabatan', ['Ketua', 'Sekretaris', 'Bendahara'])
+        //         ->count();
+
+        //     if ($existingRoles > 0 && in_array($request->jabatan, ['Ketua', 'Sekretaris', 'Bendahara'])) {
+        //         return response()->json([
+        //             'message' => 'Posyandu already has Ketua, Sekretaris, or Bendahara. Cannot change to another of these roles.',
+        //         ], 422);
+        //     }
+        // }
+
+        if (!($kader->jabatan === $request->jabatan) && !($request->jabatan === 'Anggota')) {
+            $exist = Kader::where('posyandu_id', $request->posyandu_id)
+                ->where('jabatan', $request->jabatan)
+                ->count();
+            if ($exist > 0) {
+                return response()->json(['message' => 'Posyandu ini telah memiliki seorang ' . $request->jabatan]);
+            }
+        }
+
+        $kader->jabatan = $request->jabatan;
+        $kader->nama = $request->nama;
+        $kader->posyandu_id = $request->posyandu_id;
+
+
+        $kader->update($request->all());
+
+        return response()->json([
+            'message' => 'Kader updated successfully',
+            'data' => $kader,
+        ], 200);
+    }
+
+
+
+    public function destroy(string $id)
+    {
+        $kader = Kader::find($id);
+        if (!$kader) {
+            return response()->json(['message' => 'Kader not found'], 404);
+        }
         $kader->delete();
-
         return response()->json(['message' => 'Kader deleted successfully'], 200);
     }
 }

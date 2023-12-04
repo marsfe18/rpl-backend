@@ -24,7 +24,7 @@ class KoordinatController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'longitude' => 'required',
+            'longitut' => 'required',
             'latitude' => 'required',
         ]);
 
@@ -39,7 +39,7 @@ class KoordinatController extends Controller
     public function update(Request $request, Koordinat $koordinat)
     {
         $data = $request->validate([
-            'longitude' => 'required',
+            'longitut' => 'required',
             'latitude' => 'required',
         ]);
 

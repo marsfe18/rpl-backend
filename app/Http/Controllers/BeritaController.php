@@ -66,24 +66,28 @@ class BeritaController extends Controller
             'judul' => 'required|string',
             'deskripsi' => 'required|string',
             'isi' => 'required|string',
-            'gambar' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Sesuaikan dengan kebutuhan Anda
+            // 'gambar' => 'sometimes|image|mimes:jpeg,png,jpg,gif|max:2048', // Adjust as needed
         ]);
 
-        // Jika ada file gambar yang diupload
+        // If there is a file upload
         if ($request->hasFile('gambar')) {
+            // Delete the old file
             Storage::disk('public')->delete($berita->gambar);
 
+            // Store the new file
             $gambarName = time() . '_' . $request->file('gambar')->getClientOriginalName();
-            Storage::disk('public')->put($gambarName, file_get_contents($request->file('gambar')));
+            $request->file('gambar')->storeAs('public', $gambarName);
             $berita->gambar = $gambarName;
             $berita->tipe = $request->file('gambar')->getClientMimeType();
         }
 
-        $berita->judul = $request->input('judul');
-        $berita->deskripsi = $request->input('deskripsi');
-        $berita->isi = $request->input('isi');
-        $berita->tgl_berita = $request->input('tgl_berita');
+        // Update other fields
+        $berita->judul = $request->get('judul');
+        $berita->deskripsi = $request->get('deskripsi');
+        $berita->isi = $request->get('isi');
+        $berita->tgl_berita = $request->get('tgl_berita'); // Assuming this is a field in your form
 
+        // Save the updated data
         $berita->save();
 
         return response()->json([
