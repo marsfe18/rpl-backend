@@ -9,7 +9,7 @@ class TestController extends Controller
     public function hello()
     {
         return response()->json([
-            'message' => 'hallo'
+            'message' => 'hallo '
         ]);
     }
 }
