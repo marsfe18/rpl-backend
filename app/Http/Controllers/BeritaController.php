@@ -42,7 +42,7 @@ class BeritaController extends Controller
             'deskripsi' => $request->input('deskripsi'),
             'isi' => $request->input('isi'),
             'gambar' => $gambarName,
-            'tgl_berita' => date('Y-m-d H:i:s', time()),
+            'tgl_berita' => $request->input('tgl_berita'),
             'tipe' => $request->file('gambar')->getClientMimeType()
         ]);
 
@@ -79,12 +79,12 @@ class BeritaController extends Controller
             $berita->tipe = $request->file('gambar')->getClientMimeType();
         }
 
-        $berita->judul = $request->judul;
-        $berita->deskripsi = $request->deskripsi;
-        $berita->isi = $request->isi;
-        $berita->tgl_berita = $request->tgl_berita;
+        $berita->judul = $request->input('judul');
+        $berita->deskripsi = $request->input('deskripsi');
+        $berita->isi = $request->input('isi');
+        $berita->tgl_berita = $request->input('tgl_berita');
 
-        $berita->update($berita->all());
+        $berita->save();
 
         return response()->json([
             'data' => $berita
