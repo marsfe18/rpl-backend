@@ -47,7 +47,7 @@ class AuthController extends Controller
 
         // Coba melakukan otentikasi pengguna
         if (!$token = Auth::attempt(['username' => $username, 'password' => $password])) {
-            return response()->json(['error' => 'Unauthorized'], 401);
+            return response()->json(['nessage' => 'Password/Username salah'], 401);
         }
 
         // Dapatkan informasi pengguna yang diotentikasi

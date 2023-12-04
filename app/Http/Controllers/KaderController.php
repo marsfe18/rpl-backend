@@ -68,28 +68,15 @@ class KaderController extends Controller
             'posyandu_id' => 'required',
         ]);
 
-        // Check if there is already a Kader with the specified jabatan in the same Posyandu
-        $existingKader = Kader::where('posyandu_id', $request->posyandu_id)
-            ->where('jabatan', $request->jabatan)
-            ->first();
-
-        if ($existingKader) {
-            return response()->json([
-                'message' => 'The specified role already exists in the Posyandu.',
-            ], 422);
+        if ($request->jabatan !== 'Anggota') {
+            $exist = Kader::where('posyandu_id', $request->posyandu_id)
+                ->where('jabatan', $request->jabatan)
+                ->count();
+            if ($exist > 0) {
+                return response()->json(['message' => 'Posyandu ini telah memiliki seorang ' . $request->jabatan]);
+            }
         }
 
-        // Check if there is already a Kader with the roles Ketua, Sekretaris, Bendahara in the same Posyandu
-        $existingRoles = Kader::where('posyandu_id', $request->posyandu_id)
-            ->whereIn('jabatan', ['Ketua', 'Sekretaris', 'Bendahara'])
-            ->count();
-
-        // Allow adding new Kader only if there are no existing roles of Ketua, Sekretaris, Bendahara
-        if ($existingRoles > 0 && in_array($request->jabatan, ['Ketua', 'Sekretaris', 'Bendahara'])) {
-            return response()->json([
-                'message' => 'Posyandu already has Ketua, Sekretaris, or Bendahara. Cannot add another.',
-            ], 422);
-        }
 
         $kader = Kader::create($request->all());
 
@@ -134,15 +121,17 @@ class KaderController extends Controller
         //     }
         // }
 
-        $exist = Kader::where('posyandu_id', $request->posyandu_id)
-            ->where('jabatan', $request->jabatan)
-            ->count();
-        if ($exist > 0) {
-            return response()->json(['message' => 'Posyandu ini telah memiliki seorang ' . $request->jabatan]);
+        if (!($kader->jabatan === $request->jabatan) && !($request->jabatan === 'Anggota')) {
+            $exist = Kader::where('posyandu_id', $request->posyandu_id)
+                ->where('jabatan', $request->jabatan)
+                ->count();
+            if ($exist > 0) {
+                return response()->json(['message' => 'Posyandu ini telah memiliki seorang ' . $request->jabatan]);
+            }
         }
 
-        $kader->nama = $request->nama;
         $kader->jabatan = $request->jabatan;
+        $kader->nama = $request->nama;
         $kader->posyandu_id = $request->posyandu_id;
 
 

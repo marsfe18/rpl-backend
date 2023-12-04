@@ -85,7 +85,7 @@ class PosyanduController extends Controller
         //     'latitude' => $request->latitude
         // ]);
 
-        $koordinat->save();
+        // $koordinat->save();
 
         $posyandu = new Posyandu();
         $posyandu->nama = $request->input('nama');
@@ -95,7 +95,7 @@ class PosyanduController extends Controller
         $posyandu->rw = $request->input('rw');
         $posyandu->kepala = $request->input('kepala');
         $posyandu->nomor_telepon = $request->input('nomor_telepon');
-        $posyandu->koordinat_id = $request->input('koordinat_id');
+        // $posyandu->koordinat_id = $request->input('koordinat_id');
         $posyandu->user_id = $user->id;
         $posyandu->jumlah_balita = 0;
         $posyandu->save();
