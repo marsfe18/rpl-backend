@@ -99,34 +99,13 @@ class KaderController extends Controller
         if (!$kader) {
             return response()->json(['message' => 'Kader not found'], 404);
         }
-        // if ($request->has('jabatan') && $request->jabatan !== $kader->jabatan) {
-        //     $existingKader = Kader::where('posyandu_id', $request->posyandu_id)
-        //         ->where('jabatan', $request->jabatan)
-        //         ->first();
-
-        //     if ($request->jabatan !== 'Anggota' && $existingKader) {
-        //         return response()->json([
-        //             'message' => 'The specified role already exists in the Posyandu.',
-        //         ], 422);
-        //     }
-
-        //     $existingRoles = Kader::where('posyandu_id', $request->posyandu_id)
-        //         ->whereIn('jabatan', ['Ketua', 'Sekretaris', 'Bendahara'])
-        //         ->count();
-
-        //     if ($existingRoles > 0 && in_array($request->jabatan, ['Ketua', 'Sekretaris', 'Bendahara'])) {
-        //         return response()->json([
-        //             'message' => 'Posyandu already has Ketua, Sekretaris, or Bendahara. Cannot change to another of these roles.',
-        //         ], 422);
-        //     }
-        // }
 
         if (!($kader->jabatan === $request->jabatan) && !($request->jabatan === 'Anggota')) {
             $exist = Kader::where('posyandu_id', $request->posyandu_id)
                 ->where('jabatan', $request->jabatan)
                 ->count();
             if ($exist > 0) {
-                return response()->json(['message' => 'Posyandu ini telah memiliki seorang ' . $request->jabatan]);
+                return response()->json(['message' => 'Posyandu ini telah memiliki seorang ' . $request->jabatan], 409);
             }
         }
 
