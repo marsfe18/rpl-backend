@@ -73,7 +73,7 @@ class KaderController extends Controller
                 ->where('jabatan', $request->jabatan)
                 ->count();
             if ($exist > 0) {
-                return response()->json(['message' => 'Posyandu ini telah memiliki seorang ' . $request->jabatan]);
+                return response()->json(['message' => 'Posyandu ini telah memiliki seorang ' . $request->jabatan], 409);
             }
         }
 
